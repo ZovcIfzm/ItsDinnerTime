@@ -7,6 +7,9 @@ import {
   TouchableOpacity, 
   View 
 } from 'react-native';
+import {
+  Header
+} from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
@@ -14,60 +17,83 @@ import { MonoText } from '../components/StyledText';
 
 import {connect} from 'react-redux';
 
+
+
+
 class HomeScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      date: ''
+    };
+  }
+  componentDidMount(){
+    var that = this;
+    var date = new Date().getDate();
+    var month = new Date().getMonth();
+    var day = new Date().getDay();
+    var hour = new Date().getHours();
+    that.setState({
+      date: date + month + '/' + day + ':' + hour
+    });
+  }
   render(){
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
+    return (
+      <View style={styles.container}>
+        <Header 
+        backgroundColor='#F2CC8F'
+        leftComponent={{ icon: 'menu', color: '#3D405B' }}
+        centerComponent={{ text: this.state.date, style: { color: '#3D405B' } }}
+        rightComponent={{ icon: 'home', color: '#3D405B' }}>
+          <Text>Home</Text>
+        </Header>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <View style={styles.welcomeContainer}>
+            <Image
+              source={
+                  require('../assets/images/bobaCropped.png')
+              }
+              style={styles.welcomeImage}
+            />
           </View>
 
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
+          <View style={styles.getStartedContainer}>
 
-        <TouchableOpacity onPress={() => this.props.increaseCounter()}>
-          <Text style={styles.getStartedText}>
-            CountUp
-          </Text>
-        </TouchableOpacity>
+            <TodaysDinner/>
 
-        
-        <Text style={styles.getStartedText}>{this.props.counter}</Text>
-      </ScrollView>
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+            <Text style={styles.getStartedText}>
+              Have a request? Swipe to the next page to submit your request!
+            </Text>
+          </View>
+          
+        </ScrollView>
+        <View style={styles.tabBarInfoContainer}>
+          <Text style={styles.tabBarInfoText}>Last updated 5:32pm</Text>
         </View>
       </View>
-    </View>
-  );
-          }
+    );
+  }
 }
 
 HomeScreen.navigationOptions = {
   header: null,
 };
+
+function TodaysDinner(){
+  return(
+    <View>
+      <Text style={styles.todaysDinner}>
+        Today's Dinner {"\n"}
+        Chicken Pesto Fettuccine Alfredo {"\n"}
+        with Spinach & Bubble Tea {"\n"}
+        6:30 - 7:30 
+      </Text>
+      <Text>
+        {"\n"}
+      </Text>
+    </View>
+  )
+}
 
 function DevelopmentModeNotice() {
   if (__DEV__) {
@@ -90,7 +116,8 @@ function DevelopmentModeNotice() {
 
 function mapStateToProps(state){
   return{
-    counter:state.counter
+    counter:state.counter,
+    //date:state.date
   }
 }
 
@@ -98,13 +125,14 @@ function mapDispatchToProps(dispatch){
   return{
     increaseCounter: () => dispatch({type:'INCREASE_COUNTER'}),
     decreaseCounter: () => dispatch({type: 'DECREASE_COUNTER'}),
+    //updateDate: () => dispatch({type: 'UPDATE_DATE'})
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F4F1DE',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -122,8 +150,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
@@ -188,6 +216,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  header:{
+    color: '#F2CC8F'
+  },
+  todaysDinner:{
+    borderColor: '#E07A5F',
+    borderWidth: 1,
+    borderRadius: 25,
+    padding: 7,
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

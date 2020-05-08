@@ -6,7 +6,7 @@ import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 import {connect} from 'react-redux';
 
-class LinksScreen extends React.Component {
+class RequestsScreen extends React.Component {
   render(){
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(LinksScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RequestsScreen);
