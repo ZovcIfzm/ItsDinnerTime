@@ -12,6 +12,8 @@ import {
 } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 
+import GestureRecognizer from 'react-native-swipe-gestures';
+
 import { MonoText } from '../components/StyledText';
 
 
@@ -39,7 +41,9 @@ class HomeScreen extends React.Component{
   }
   render(){
     return (
-      <View style={styles.container}>
+      <GestureRecognizer 
+      style={styles.container}
+      onSwipeLeft={this._onSwipeLeft}>
         <Header 
         backgroundColor='#F2CC8F'
         leftComponent={{ icon: 'menu', color: '#3D405B' }}
@@ -70,9 +74,13 @@ class HomeScreen extends React.Component{
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>Last updated 5:32pm</Text>
         </View>
-      </View>
+      </GestureRecognizer>
     );
   }
+  
+  _onSwipeLeft = gestureState =>{
+    this.props.navigation.navigate('Requests')
+  }  
 }
 
 HomeScreen.navigationOptions = {
@@ -94,25 +102,6 @@ function TodaysDinner(){
     </View>
   )
 }
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. 
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
 
 function mapStateToProps(state){
   return{
