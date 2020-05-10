@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 
@@ -7,35 +7,47 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 
 import {connect} from 'react-redux';
 
+const fieldValue = '';
+
+
 class RequestsScreen extends React.Component {
+  constructor(props) {  
+    super(props);  
+    this.state = {text: ''};  
+}  
   render(){
     return (
      <GestureRecognizer style={styles.container} onSwipeRight={this._onSwipeRight}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           
-          <TouchableOpacity onPress={() => this.props.increaseCounter()}>
-            <Text style={styles.getStartedText}>
-              CountUp
-            </Text>
-          </TouchableOpacity>
-
+          <CookInfo></CookInfo>
           
-          <Text style={styles.getStartedText}>{this.props.counter}</Text>
+          <Text style={styles.formLabel}>What is your request?</Text>
+          <TextInput 
+            style={styles.formInput}
+            placeholder="your request"
+            onChangeText={text => this.setState({text})}
+          />
+
+          <TouchableOpacity style={styles.formButton}>
+            <Text style={styles.formButtonText}>Submit</Text>
+          </TouchableOpacity>
+          
           
           <OptionButton
             icon="md-school"
-            label="Read the Expo documentation"
+            label="Option 1"
           />
 
           <OptionButton
             icon="md-compass"
-            label="Read the React Navigation documentation"
+            label="Option 2"
             
           />
 
           <OptionButton
             icon="ios-chatboxes"
-            label="Ask a question on the forums"
+            label="Option 3"
           
             isLastOption
           />
@@ -53,12 +65,21 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
   return (
     <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
       <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
+        <Text style={styles.optionText}>{label}</Text>
       </View>
     </RectButton>
   );
+}
+
+function CookInfo(){
+  return(
+    <View style={styles.todaysDinner}>
+      <Text style={styles.todaysDinnerLabel}> Today's Cook </Text>
+      <Text style={styles.todaysDinnerText}> Gordan Ramsey </Text>
+      <Text style={styles.todaysDinnerLabel}> Today's Dinner </Text>
+      <Text style={styles.todaysDinnerText}> Chicken Pesto Fettuccine Alfredo </Text>
+    </View>
+  )
 }
 
 
@@ -93,15 +114,62 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: 0,
     borderColor: '#ededed',
+    alignSelf: 'center',
   },
   lastOption: {
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   optionText: {
     fontSize: 15,
-    alignSelf: 'flex-start',
     marginTop: 1,
   },
+  getStartedText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  formLabel: {
+    fontSize: 18,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  formInput:{
+    fontSize: 14,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  formButton:{
+    paddingHorizontal: 50,
+    width: 200,
+    borderRadius: 50,
+    backgroundColor: 'rgba(96,100,109, 0.1)',
+    alignSelf: 'center'
+  },
+  formButtonText:{
+    textAlign: 'center',
+    color: 'rgba(96,100,109, 1)',
+  },
+  todaysDinner:{
+    borderColor: '#E07A5F',
+    borderWidth: 1,
+    borderRadius: 25,
+    padding: 7,
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+  todaysDinnerLabel:{
+    fontSize: 20,
+    color: 'rgba(116,120,129, 1)',
+  },
+  todaysDinnerText:{
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+  }
 });
 
 
