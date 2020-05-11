@@ -11,16 +11,11 @@ import {
   Header
 } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
-
 import GestureRecognizer from 'react-native-swipe-gestures';
-
 import { MonoText } from '../components/StyledText';
-
-
 import {connect} from 'react-redux';
 
-
-
+import {TodaysDinner, TomorrowsDinner, InfoCard} from '../components/Cards';
 
 class HomeScreen extends React.Component{
   constructor(props){
@@ -32,11 +27,11 @@ class HomeScreen extends React.Component{
   componentDidMount(){
     var that = this;
     var date = new Date().getDate();
-    var month = new Date().getMonth();
-    var day = new Date().getDay();
+    var month = new Date().getMonth() + 1;
     var hour = new Date().getHours();
+    var minute = new Date().getMinutes();
     that.setState({
-      date: date + month + '/' + day + ':' + hour
+      date: month + '/' + date
     });
   }
   render(){
@@ -45,11 +40,10 @@ class HomeScreen extends React.Component{
       style={styles.container}
       onSwipeLeft={this._onSwipeLeft}>
         <Header 
-        backgroundColor='#F2CC8F'
-        leftComponent={{ icon: 'menu', color: '#3D405B' }}
-        centerComponent={{ text: this.state.date, style: { color: '#3D405B' } }}
-        rightComponent={{ icon: 'home', color: '#3D405B' }}>
-          <Text>Home</Text>
+          backgroundColor='#E07A5F'
+          centerComponent={{ text: "Home", style: styles.headerText}}
+          rightComponent={{ text: this.state.date, style: styles.headerText }}
+        >
         </Header>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
@@ -62,12 +56,10 @@ class HomeScreen extends React.Component{
           </View>
 
           <View style={styles.getStartedContainer}>
+            <TodaysDinner></TodaysDinner>
+            <TomorrowsDinner/>
+            <InfoCard/>
 
-            <TodaysDinner/>
-
-            <Text style={styles.getStartedText}>
-              Have a request? Swipe to the next page to submit your request!
-            </Text>
           </View>
           
         </ScrollView>
@@ -87,22 +79,6 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
-function TodaysDinner(){
-  return(
-    <View>
-      <Text style={styles.todaysDinner}>
-        Today's Dinner {"\n"}
-        Chicken Pesto Fettuccine Alfredo {"\n"}
-        with Spinach & Bubble Tea {"\n"}
-        6:30 - 7:30 
-      </Text>
-      <Text>
-        {"\n"}
-      </Text>
-    </View>
-  )
-}
-
 function mapStateToProps(state){
   return{
     counter:state.counter,
@@ -121,14 +97,7 @@ function mapDispatchToProps(dispatch){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F1DE',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+    backgroundColor: '#F2CC8F',
   },
   contentContainer: {
     paddingTop: 30,
@@ -148,12 +117,6 @@ const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
   },
   codeHighlightContainer: {
     backgroundColor: 'rgba(0,0,0,0.05)',
@@ -183,41 +146,21 @@ const styles = StyleSheet.create({
       },
     }),
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
+    backgroundColor: '#F4F1DE',
+    paddingVertical: 5,
   },
   tabBarInfoText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
   header:{
     color: '#F2CC8F'
   },
-  todaysDinner:{
-    borderColor: '#E07A5F',
-    borderWidth: 1,
-    borderRadius: 25,
-    padding: 7,
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  }
+  headerText:{
+    color: '#F4F1DE',
+    fontSize: 20,
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

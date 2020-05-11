@@ -51,7 +51,7 @@ function getHeaderTitle(route) {
 const styles = StyleSheet.create({
   //https://coolors.co/f4f1de-e07a5f-3d405b-81b29a-f2cc8f
   tabBar:{
-    backgroundColor: '#F2CC8F'
+    backgroundColor: '#E07A5F'
   },
   tabBarLabel:{
     fontSize: 20,

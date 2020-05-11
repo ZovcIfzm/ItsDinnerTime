@@ -2,12 +2,17 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
+import {
+  Header
+} from 'react-native-elements'
 
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 import {connect} from 'react-redux';
 
-const fieldValue = '';
+
+import {TodaysDinner, TomorrowsDinner, InfoCard} from '../components/Cards';
+import {card_styles} from '../components/Cards.styles';
 
 
 class RequestsScreen extends React.Component {
@@ -18,14 +23,21 @@ class RequestsScreen extends React.Component {
   render(){
     return (
      <GestureRecognizer style={styles.container} onSwipeRight={this._onSwipeRight}>
+       <Header 
+          backgroundColor='#E07A5F'
+          centerComponent={{ text: "Requests", style: styles.headerText}}
+        ></Header>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           
-          <CookInfo></CookInfo>
+          <Info info="Cook: Stanley Kubrick"/>
+          <TodaysDinner/>
+          <Info info="Cook: Stanley Kubrick"/>
+          <TomorrowsDinner/>
+          <RequestInfo/>
           
-          <Text style={styles.formLabel}>What is your request?</Text>
           <TextInput 
             style={styles.formInput}
-            placeholder="your request"
+            placeholder="Enter Request"
             onChangeText={text => this.setState({text})}
           />
 
@@ -33,24 +45,12 @@ class RequestsScreen extends React.Component {
             <Text style={styles.formButtonText}>Submit</Text>
           </TouchableOpacity>
           
+          <Info info="Text cook"/>
           
-          <OptionButton
-            icon="md-school"
-            label="Option 1"
-          />
-
-          <OptionButton
-            icon="md-compass"
-            label="Option 2"
-            
-          />
-
-          <OptionButton
-            icon="ios-chatboxes"
-            label="Option 3"
+          <Info info="Email cook"/>
           
-            isLastOption
-          />
+          <Info info="Enter Dinner Entry"/>
+
         </ScrollView>
       </GestureRecognizer>
     );
@@ -71,16 +71,26 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
   );
 }
 
-function CookInfo(){
+function Info({info}){
   return(
-    <View style={styles.todaysDinner}>
-      <Text style={styles.todaysDinnerLabel}> Today's Cook </Text>
-      <Text style={styles.todaysDinnerText}> Gordan Ramsey </Text>
-      <Text style={styles.todaysDinnerLabel}> Today's Dinner </Text>
-      <Text style={styles.todaysDinnerText}> Chicken Pesto Fettuccine Alfredo </Text>
+    <View style={card_styles.infoCard}>
+      <Text style={card_styles.infoCardText}>
+        {info}
+      </Text>
     </View>
   )
 }
+
+function RequestInfo(){
+  return(
+    <View style={card_styles.requestCard}>
+      <Text style={card_styles.infoCardText}>
+        What is your request?
+      </Text>
+    </View>
+  )
+}
+
 
 
 function mapStateToProps(state){
@@ -99,16 +109,16 @@ function mapDispatchToProps(dispatch){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#F2CC8F',
   },
   contentContainer: {
     paddingTop: 15,
+    alignItems: 'center',
   },
   optionIconContainer: {
     marginRight: 12,
   },
   option: {
-    backgroundColor: '#fdfdfd',
     paddingHorizontal: 15,
     paddingVertical: 15,
     borderWidth: StyleSheet.hairlineWidth,
@@ -150,26 +160,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'rgba(96,100,109, 1)',
   },
-  todaysDinner:{
-    borderColor: '#E07A5F',
-    borderWidth: 1,
-    borderRadius: 25,
-    padding: 7,
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-    alignItems: 'center',
-    marginHorizontal: 50,
+  
+  header:{
+    color: '#F2CC8F'
   },
-  todaysDinnerLabel:{
+  headerText:{
+    color: '#F4F1DE',
     fontSize: 20,
-    color: 'rgba(116,120,129, 1)',
   },
-  todaysDinnerText:{
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-  }
 });
 
 
