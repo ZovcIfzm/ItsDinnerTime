@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {card_styles} from './Cards.styles'
 
-export function TodaysDinner(){
+export function TodaysDinner(likes){
   return(
     <View style={card_styles.dinner}>
       <Text style={card_styles.dinnerText}>
@@ -35,11 +35,51 @@ export function TomorrowsDinner(){
   )
 }
 
-export function InfoCard(){
+export function GreenInfo({info}){
   return(
-    <View style={card_styles.infoCard}>
+    <View style={card_styles.greenInfoCard}>
       <Text style={card_styles.infoCardText}>
-        Have a request? Swipe or press "requests" below to enter
+        {info}
+      </Text>
+    </View>
+  )
+}
+
+export function RedInfo({info}){
+  return(
+    <View style={card_styles.redInfoCard}>
+      <Text style={card_styles.infoCardText}>
+        {info}
+      </Text>
+    </View>
+  )
+}
+
+export function BlueInfo({info}){
+  return(
+    <View style={card_styles.blueInfoCard}>
+      <Text style={card_styles.infoCardText}>
+        {info}
+      </Text>
+    </View>
+  )
+}
+
+export function LightBlueInfo({info}){
+  return(
+    <View style={card_styles.lightBlueInfoCard}>
+      <Text style={card_styles.infoCardText}>
+        {info}
+      </Text>
+    </View>
+  )
+}
+
+export function NumLikes({info, numLikes}){
+  return(
+    <View style={card_styles.greenInfoCard}>
+      <Text style={card_styles.infoCardText}>
+        {info}{numLikes}
       </Text>
     </View>
   )

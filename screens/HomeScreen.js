@@ -15,7 +15,9 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import { MonoText } from '../components/StyledText';
 import {connect} from 'react-redux';
 
-import {TodaysDinner, TomorrowsDinner, InfoCard} from '../components/Cards';
+import LinearGradient from 'react-native-linear-gradient';
+
+import {TodaysDinner, TomorrowsDinner, RedInfo, GreenInfo, NumLikes} from '../components/Cards';
 
 class HomeScreen extends React.Component{
   constructor(props){
@@ -36,36 +38,50 @@ class HomeScreen extends React.Component{
   }
   render(){
     return (
+      
       <GestureRecognizer 
       style={styles.container}
       onSwipeLeft={this._onSwipeLeft}>
-        <Header 
-          backgroundColor='#E07A5F'
-          centerComponent={{ text: "Home", style: styles.headerText}}
-          rightComponent={{ text: this.state.date, style: styles.headerText }}
-        >
-        </Header>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                  require('../assets/images/bobaCropped.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
+        <LinearGradient colors={['#FFFABD', '#F2CC8F','#E2BC7F']} 
+        style={styles.container}>
+          <Header 
+            backgroundColor='#E07A5F'
+            //leftComponent={{text: this.props.username, style: styles.headerText}}
+            centerComponent={{ text: "Home", style: styles.headerText}}
+            rightComponent={{ text: this.state.date, style: styles.headerText }}
+          >
+          </Header>
+          <ScrollView style={styles.container}>
+            <View style={styles.welcomeContainer}>
+              <Image
+                source={
+                    require('../assets/images/bobaCropped.png')
+                }
+                style={styles.welcomeImage}
+              />
+            </View>
 
-          <View style={styles.getStartedContainer}>
-            <TodaysDinner></TodaysDinner>
-            <TomorrowsDinner/>
-            <InfoCard/>
+            <View style={styles.getStartedContainer}>
+              <View style={{flexDirection: 'row', flex: 3}}>
+                <TouchableOpacity onPress={() => this.props.increaseLikes()}>
+                  <GreenInfo info="Like"/>
+                </TouchableOpacity >
+                <TouchableOpacity onPress={() => this.props.decreaseLikes()}>
+                  <RedInfo info="Dislike"/>
+                </TouchableOpacity>
+                <NumLikes info="Likes: " numLikes={this.props.likes}/>
+              </View>
+              <TodaysDinner></TodaysDinner>
+              <TomorrowsDinner/>
+              <GreenInfo info="Have a request? Swipe or press 'Requests' below to enter"/>
 
+            </View>
+            
+          </ScrollView>
+          <View style={styles.tabBarInfoContainer}>
+            <Text style={styles.tabBarInfoText}>Last updated 5:32pm</Text>
           </View>
-          
-        </ScrollView>
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>Last updated 5:32pm</Text>
-        </View>
+        </LinearGradient>
       </GestureRecognizer>
     );
   }
@@ -82,7 +98,10 @@ HomeScreen.navigationOptions = {
 function mapStateToProps(state){
   return{
     counter:state.counter,
-    //date:state.date
+    
+    likes: state.likes,
+    username: state.username,
+    password: state.password,
   }
 }
 
@@ -90,6 +109,9 @@ function mapDispatchToProps(dispatch){
   return{
     increaseCounter: () => dispatch({type:'INCREASE_COUNTER'}),
     decreaseCounter: () => dispatch({type: 'DECREASE_COUNTER'}),
+    
+    increaseLikes: () => dispatch({type:'INC_LIKES'}),
+    decreaseLikes: () => dispatch({type: 'DEC_LIKES'}),
     //updateDate: () => dispatch({type: 'UPDATE_DATE'})
   }
 }
@@ -97,7 +119,9 @@ function mapDispatchToProps(dispatch){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2CC8F',
+  },
+  linearGradient: {
+    flex: 1
   },
   contentContainer: {
     paddingTop: 30,
@@ -130,7 +154,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tabBarInfoContainer: {
-    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
