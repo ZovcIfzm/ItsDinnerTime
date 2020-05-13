@@ -12,9 +12,10 @@ api = Api(app)
 
 class Entries(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  main_course = db.Column(db.String(25), nullable=False)
-  side = db.Column(db.String(25), nullable = True)
-  date_created = db.Column(db.DateTime, default=datetime.utcnow)
+  dinner = db.Column(db.String(25), nullable=False)
+  cook = db.Column(db.String(25), nullable = True)
+  day = db.Column(db.Integer, default = -1)
+  #date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
   def __repr__(self):
     return '<Task %r>' % self.id
@@ -22,9 +23,10 @@ class Entries(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
   if request.method == 'POST':
-    task_main_course = request.form['main_course']
-    task_side = request.form['side']
-    new_task = Entries(main_course = task_main_course, side = task_side)
+    task_dinner = request.form['dinner']
+    task_cook = request.form['cook']
+    task_day = request.form['day']
+    new_task = Entries(dinner = task_dinner, cook = task_cook, day = task_day)
 
     try:
       dn.session.add(new_task)
