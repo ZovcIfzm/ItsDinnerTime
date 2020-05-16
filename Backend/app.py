@@ -1,10 +1,16 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
+
+class MealEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    course = db.Column(db.String(50), nullable=False)
+    lunchOrDinner = db.Column(db.String(10), nullable=False)
+    date = db.Column(db.String(10), nullable=False)
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +20,18 @@ class Todo(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.id
 
+@app.route('/app/', methods=['POST', 'GET'])
+def sendDinner():
+    if request.method == 'POST':
+        data = request.get_json()
+        #course = data['course']
+        #mealtime = data['mealtime']
+        #date = data['date']
+        post_info = json.dumps({
+            'course': data['course'],
+            'lunchOrDinner': data['mealtime'],
+            'date': data['date']
+        })
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
