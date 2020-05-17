@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 class MealEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course = db.Column(db.String(50), nullable=False)
-    lunchOrDinner = db.Column(db.String(10), nullable=False)
+    mealtime = db.Column(db.Integer, default=-1)
     date = db.Column(db.String(10), nullable=False)
 
 class Todo(db.Model):
@@ -24,14 +24,26 @@ class Todo(db.Model):
 def sendDinner():
     if request.method == 'POST':
         data = request.get_json()
+        new_meal = MealEntry()
+        new_meal.course = data['course']
+        new_meal.mealtime = data['mealtime']
+        new_meal.date = data['date']
+
+        db.session.add(new_meal)
+        db.session.commit()
+    
+    elif request.method == 'GET':
+        
+        meals = MealEntry.query.order_by(MealEntry.mealtime).all()
+        return jsonify({'meals': meals})
         #course = data['course']
         #mealtime = data['mealtime']
         #date = data['date']
-        post_info = json.dumps({
-            'course': data['course'],
-            'lunchOrDinner': data['mealtime'],
-            'date': data['date']
-        })
+        #post_info = json.dumps({
+        #    'course': data['course'],
+        #    'lunchOrDinner': data['mealtime'],
+        #    'date': data['date']
+        #})
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
