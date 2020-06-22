@@ -1,59 +1,76 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
-
 import {
-  Header
-} from 'react-native-elements'
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import {RectButton, ScrollView} from 'react-native-gesture-handler';
+
+import {Header} from 'react-native-elements';
 
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 
-
-import {TodaysDinner, TomorrowsDinner, GreenInfo, BlueInfo, LightBlueInfo, RedInfo, NumLikes} from '../components/Cards';
+import {
+  TodaysDinner,
+  TomorrowsDinner,
+  GreenInfo,
+  BlueInfo,
+  LightBlueInfo,
+  RedInfo,
+  NumLikes,
+} from '../components/Cards';
 import {card_styles} from '../components/Cards.styles';
 
+import firestore from '@react-native-firebase/firestore';
 
 class RequestsScreen extends React.Component {
-  constructor(props) {  
-    super(props);  
-    this.state = {text: ''};  
-}  
-  render(){
+  constructor(props) {
+    super(props);
+    this.state = {text: ''};
+  }
+  addMeal() {
+    const ref = firestore().collection('meals');
+  }
+
+  render() {
     return (
-     <GestureRecognizer style={styles.container} onSwipeRight={this._onSwipeRight}>
-       
-       <LinearGradient colors={['#FFFABD', '#F2CC8F','#E2BC7F']} 
-        style={styles.container}>
-        <Header 
-            backgroundColor='#E07A5F'
-            centerComponent={{ text: "Requests", style: styles.headerText}}
-          ></Header>
+      <GestureRecognizer
+        style={styles.container}
+        onSwipeRight={this._onSwipeRight}>
+        <LinearGradient
+          colors={['#FFFABD', '#F2CC8F', '#E2BC7F']}
+          style={styles.container}>
+          <Header
+            backgroundColor="#E07A5F"
+            centerComponent={{text: 'Requests', style: styles.headerText}}
+          />
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            
-            <LightBlueInfo info="Cook: Stanley Kubrick"/>
-            
+            <LightBlueInfo info="Cook: Stanley Kubrick" />
+
             <View style={{flexDirection: 'row', flex: 3}}>
-              <GreenInfo info="Text cook"/>
-              <GreenInfo info="Email cook"/>
+              <GreenInfo info="Text cook" />
+              <GreenInfo info="Email cook" />
             </View>
             <View style={{flexDirection: 'row', flex: 3}}>
               <TouchableOpacity onPress={() => this.props.increaseLikes()}>
-                <GreenInfo info="Like"/>
-              </TouchableOpacity >
-              <TouchableOpacity onPress={() => this.props.decreaseLikes()}>
-                <RedInfo info="Dislike"/>
+                <GreenInfo info="Like" />
               </TouchableOpacity>
-              <NumLikes info="Likes: " numLikes={this.props.likes}/>
+              <TouchableOpacity onPress={() => this.props.decreaseLikes()}>
+                <RedInfo info="Dislike" />
+              </TouchableOpacity>
+              <NumLikes info="Likes: " numLikes={this.props.likes} />
             </View>
-            
-            <TodaysDinner/>
-            <TomorrowsDinner/>
-            <RedInfo info="Please enter your request below"/>
-            
-            <TextInput 
+
+            <TodaysDinner />
+            <TomorrowsDinner />
+            <RedInfo info="Please enter your request below" />
+
+            <TextInput
               style={styles.formInput}
               placeholder="Enter Request"
               onChangeText={text => this.setState({text})}
@@ -62,35 +79,34 @@ class RequestsScreen extends React.Component {
             <TouchableOpacity style={styles.formButton}>
               <Text style={styles.formButtonText}>Submit</Text>
             </TouchableOpacity>
-            
-            <LightBlueInfo info="Enter Dinner Entry"/>
 
+            <LightBlueInfo info="Enter Dinner Entry" />
           </ScrollView>
         </LinearGradient>
       </GestureRecognizer>
     );
   }
-  
-  _onSwipeRight = gestureState =>{
-    this.props.navigation.navigate('Home')
-  }  
+
+  _onSwipeRight = gestureState => {
+    this.props.navigation.navigate('Home');
+  };
 }
 
-function mapStateToProps(state){
-  return{
-    counter:state.counter,
-    likes: state.likes
-  }
+function mapStateToProps(state) {
+  return {
+    counter: state.counter,
+    likes: state.likes,
+  };
 }
 
-function mapDispatchToProps(dispatch){
-  return{
-    increaseCounter: () => dispatch({type:'INCREASE_COUNTER'}),
+function mapDispatchToProps(dispatch) {
+  return {
+    increaseCounter: () => dispatch({type: 'INCREASE_COUNTER'}),
     decreaseCounter: () => dispatch({type: 'DECREASE_COUNTER'}),
-    
-    increaseLikes: () => dispatch({type:'INC_LIKES'}),
+
+    increaseLikes: () => dispatch({type: 'INC_LIKES'}),
     decreaseLikes: () => dispatch({type: 'DEC_LIKES'}),
-  }
+  };
 }
 
 const styles = StyleSheet.create({
@@ -112,12 +128,12 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
-  formInput:{
+  formInput: {
     fontSize: 14,
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
-  formButton:{
+  formButton: {
     paddingHorizontal: 50,
     width: 300,
     borderRadius: 50,
@@ -126,19 +142,21 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10,
   },
-  formButtonText:{
+  formButtonText: {
     textAlign: 'center',
-    color: '#F4F1DE'
+    color: '#F4F1DE',
   },
-  
-  header:{
-    color: '#F2CC8F'
+
+  header: {
+    color: '#F2CC8F',
   },
-  headerText:{
+  headerText: {
     color: '#F4F1DE',
     fontSize: 20,
   },
 });
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequestsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RequestsScreen);
