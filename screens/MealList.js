@@ -21,23 +21,36 @@ import {
   NumLikes,
 } from '../components/Cards';
 
-class HomeScreen extends React.Component {
+import firestore from '@react-native-firebase/firestore';
+
+class MealList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: '',
+      data: [],
     };
   }
   componentDidMount() {
     var that = this;
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var hour = new Date().getHours();
-    var minute = new Date().getMinutes();
-    that.setState({
-      date: month + '/' + date,
+
+    const ref = firestore().collection('meals');
+    var preData = [];
+    ref.get().then(querySnapshot => {
+      querySnapshot.forEach(documentSnapshot => {
+        console.log('doc: ', documentSnapshot.data());
+        preData = [...preData, documentSnapshot.data()];
+      });
+      that.setState({
+        data: preData,
+      });
+      console.log('final');
+      console.log(this.state.data);
+      console.log('after final');
     });
   }
+  retrieveMeals = () => {
+    var that = this;
+  };
   render() {
     return (
       <LinearGradient
@@ -49,28 +62,17 @@ class HomeScreen extends React.Component {
           centerComponent={{text: 'Home', style: styles.headerText}}
           rightComponent={{text: this.state.date, style: styles.headerText}}
         />
-        <ScrollView style={styles.container}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={require('../assets/images/bobaCropped.png')}
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            <View style={{flexDirection: 'row', flex: 3}}>
-              <TouchableOpacity onPress={() => this.props.increaseLikes()}>
-                <GreenInfo info="Like" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.props.decreaseLikes()}>
-                <RedInfo info="Dislike" />
-              </TouchableOpacity>
-              <NumLikes info="Likes: " numLikes={this.props.likes} />
+        <ScrollView
+          data={this.state.data}
+          keyExtractor={item => item.id}
+          style={styles.container}>
+          {this.state.data.map((item, key) => (
+            <View key={key}>
+              <GreenInfo info={'date: ' + item.date} />
+              <GreenInfo info={'meal: ' + item.meal} />
+              <GreenInfo info={'time: ' + item.time} />
             </View>
-            <TodaysDinner />
-            <TomorrowsDinner />
-            <GreenInfo info="Have a request? Swipe or press 'Requests' below to enter" />
-          </View>
+          ))}
         </ScrollView>
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>Last updated 5:32pm</Text>
@@ -78,13 +80,9 @@ class HomeScreen extends React.Component {
       </LinearGradient>
     );
   }
-
-  _onSwipeLeft = gestureState => {
-    this.props.navigation.navigate('Requests');
-  };
 }
 
-HomeScreen.navigationOptions = {
+MealList.navigationOptions = {
   header: null,
 };
 
@@ -182,4 +180,4 @@ const styles = StyleSheet.create({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(HomeScreen);
+)(MealList);
